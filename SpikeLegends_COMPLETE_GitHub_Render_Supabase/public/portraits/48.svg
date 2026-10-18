@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 500" role="img" aria-label="Stylized portrait of Michinari Akagi">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b3ada2" stop-opacity="0.74"/><stop offset=".55" stop-color="#17263b"/><stop offset="1" stop-color="#060e1c"/></linearGradient>
+<linearGradient id="j" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#b3ada2"/><stop offset="1" stop-color="#2f2e31"/></linearGradient><linearGradient id="skin" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#dfb391"/><stop offset=".55" stop-color="#dfb391"/><stop offset="1" stop-color="#c08c6e"/></linearGradient>
+<clipPath id="frame"><rect width="420" height="500" rx="15"/></clipPath></defs><g clip-path="url(#frame)">
+<rect width="420" height="500" fill="url(#bg)"/><circle cx="218" cy="211" r="167" fill="none" stroke="#b3ada2" stroke-width="2" opacity=".34"/><circle cx="218" cy="211" r="133" fill="none" stroke="white" stroke-width="1" opacity=".14"/>
+<path d="M0 87 L420 5 M-30 185 L400 35 M0 310 L420 155" stroke="white" stroke-width="4" opacity=".1"/><text x="30" y="65" font-family="Arial" font-size="26" font-weight="900" fill="white" opacity=".16">#15</text>
+<ellipse cx="211" cy="501" rx="226" ry="139" fill="#000" opacity=".24"/><path d="M20 500 Q37 384 125 361 L155 337 L270 337 L298 366 Q390 379 409 500Z" fill="url(#j)" stroke="#0c1729" stroke-width="7"/><path d="M125 361 L175 422 L209 374 L250 425 L298 363" fill="none" stroke="#2f2e31" stroke-width="11" opacity=".9"/><path d="M175 331 L177 367 Q211 403 246 367 L246 333" fill="url(#skin)" stroke="#986a53" stroke-width="2"/>
+<path d="M144 193 Q151 131 209 132 Q269 133 280 195 L286 262 Q275 330 211 346 Q148 329 135 270Z" fill="url(#skin)" stroke="#8c5a40" stroke-width="3"/>
+<path d="M139 232 Q119 210 122 241 Q119 279 144 285 M283 230 Q307 214 305 245 Q300 276 280 277" fill="#dfb391" stroke="#a27154" stroke-width="3"/>
+<path d="M151 221 Q169 210 189 223 M228 224 Q246 208 263 221" stroke="#42342c" stroke-width="6" fill="none" stroke-linecap="round"/>
+<path d="M152 236 Q169 229 191 236 M226 236 Q246 228 263 236" fill="none" stroke="#343238" stroke-width="3" stroke-linecap="round"/><ellipse cx="173" cy="238" rx="5.8" ry="10" fill="#6a4d3d"/><ellipse cx="243" cy="238" rx="5.8" ry="10" fill="#6a4d3d"/><circle cx="175" cy="235" r="2.4" fill="white"/><circle cx="245" cy="235" r="2.4" fill="white"/>
+<path d="M209 239 L203 270 Q211 273 217 270" stroke="#af795e" stroke-width="2.8" fill="none"/><path d="M182 290 Q211 306 242 290" stroke="#955a4c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M166 275 L153 272 M263 274 L274 270" stroke="#ab785e" stroke-width="2" opacity=".4"/>
+<path d="M112 193 Q107 92 213 87 Q316 82 305 193 L278 160 Q205 131 144 172Z" fill="#42342c"/>
+<path d="M101 207 Q102 170 123 143 L143 204 L138 252" fill="#42342c"/><path d="M312 204 Q315 165 294 136 L276 198 L283 252" fill="#42342c"/>
+<text x="211" y="478" font-family="Arial Black,Arial" font-size="52" font-weight="900" text-anchor="middle" fill="white" stroke="#0b1321" stroke-width="2" paint-order="stroke">15</text>
+<path d="M0 470 L0 500 L420 500 L420 467" fill="none" stroke="#b3ada2" stroke-width="5" opacity=".8"/>
+</g></svg>

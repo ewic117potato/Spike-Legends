@@ -1,0 +1,50 @@
+'use strict';
+const assert=require('assert');
+const http=require('http');
+const {spawn}=require('child_process');
+const {WebSocket}=require('ws');
+const port=32579;
+const child=spawn(process.execPath,['server.js'],{cwd:process.cwd(),env:{...process.env,PORT:String(port),RALLY_INTERVAL_MS:'85'}});
+let output='';child.stdout.on('data',d=>output+=d);child.stderr.on('data',d=>output+=d);
+async function get(route){return new Promise((resolve,reject)=>http.get({host:'127.0.0.1',port,path:route},r=>{let body='';r.on('data',d=>body+=d);r.on('end',()=>resolve({status:r.statusCode,body}))}).on('error',reject));}
+async function until(fn,timeout=13000){const start=Date.now();while(Date.now()-start<timeout){try{const result=await fn();if(result)return result;}catch{}await new Promise(r=>setTimeout(r,30));}throw Error('Timeout waiting for assertion');}
+function client(){return new Promise((resolve,reject)=>{const sock=new WebSocket(`ws://127.0.0.1:${port}`),events=[];
+ sock.on('open',()=>resolve({sock,events,send:m=>sock.send(JSON.stringify(m))}));
+ sock.on('message',d=>events.push(JSON.parse(d.toString())));sock.on('error',reject);
+});}
+(async()=>{
+ await until(async()=>(await get('/health')).status===200);
+ assert.equal((await get('/')).status,200);
+ assert.equal((await get('/expansion.js')).status,200);
+ assert.equal(JSON.parse((await get('/api/public-config')).body).supabasePublishableKey,'');
+ const a=await client(),b=await client();
+ const squad=Array.from({length:6},(_,i)=>({name:'ACE '+i,power:75,attack:76,defense:73,set:71,id:'k'+i,position:['OH','MB','OP','OH','S','MB'][i],school:'IRON CROWS'}));
+ a.send({type:'create',name:'HOME',squad,strategy:'power'});
+ const first=await until(()=>a.events.find(m=>m.type==='room'));
+ assert.match(first.code,/^[0-9A-F]{6}$/);assert.equal(first.youIndex,0);
+ b.send({type:'join',name:'AWAY',code:first.code,squad});
+ await until(()=>b.events.find(m=>m.type==='room'));
+ assert.equal(b.events.find(m=>m.type==='room').youIndex,1);
+ a.send({type:'ready',ready:true});b.send({type:'ready',ready:true});
+ await until(()=>a.events.find(m=>m.type==='start')&&b.events.find(m=>m.type==='start'));
+ b.send({type:'strategy',strategy:'iron'});
+ const styles=await until(()=>a.events.find(m=>m.type==='strategy'&&m.strategies[1]==='iron'));
+ assert.equal(styles.strategies[0],'power');
+ await until(()=>a.events.filter(m=>m.type==='rally').length>=2&&b.events.filter(m=>m.type==='rally').length>=2);
+ const x=a.events.filter(m=>m.type==='rally'),y=b.events.filter(m=>m.type==='rally');
+ assert.deepEqual(x[0].score,y[0].score);
+ assert.equal(x[0].actor,y[0].actor);
+ const result=await until(()=>a.events.find(m=>m.type==='finish'));
+ const resultB=b.events.find(m=>m.type==='finish');
+ assert(resultB,'Other player must receive match finish');
+ assert.deepEqual(result.score,resultB.score);
+ assert(result.rallies>=15&&result.rallies<=45);
+ const waitingBefore=a.events.filter(m=>m.type==='room'&&m.status==='waiting').length;
+ a.send({type:'rematch'});await until(()=>a.events.find(m=>m.type==='rematch_wait'));
+ assert(a.events.at(-1)?.type!=='room','Single player cannot force rematch');
+ b.send({type:'rematch'});
+ const rematch=await until(()=>a.events.filter(m=>m.type==='room'&&m.status==='waiting').length>waitingBefore);
+ assert(rematch);
+ a.sock.close();b.sock.close();
+ console.log('PASS: health, static, safe config, room codes, roster validation, ready, strategies, server-synced rallies, match finish, dual rematch consent');
+})().catch(e=>{console.error('FAIL',e);console.error(output);process.exitCode=1;}).finally(()=>child.kill());
